@@ -1,0 +1,13 @@
+.DS_Store
+*~
+*.aux
+*.dvi
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.o
+a.out
+myshell
