@@ -69,13 +69,13 @@ void findRedirect(char *args[]) {               // リダイレクトの指示�
   args[j] = NULL;
 }
 
-void redirect(int fd, char *path, int mode) {   // リダイレクト処理をする
+void redirect(int fd, char *path, int flag) {   // リダイレクト処理をする
   //
   // externalCom 関数のどこかから呼び出される
   // 
   // fd   : リダイレクトするファイルディスクリプタ
   // path : リダイレクト先ファイル
-  // mode : open システムコール渡すモード
+  // flag : open システムコール渡すフラグ
   //        入力の場合 O_RDONLY
   //        出力の場合 O_WRONLY|O_TRUNC|O_CREAT
   //
