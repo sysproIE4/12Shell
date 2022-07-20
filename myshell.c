@@ -14,38 +14,36 @@
 int parse(char *p, char *args[]) {              // コマンド行を解析する
   int i=0;                                      // 解析後文字列の数
   for (;;) {
-    while (isspace(*p))                         // 空白が終わるまで進む
-      *p++ = '\0';                              //   前の文字列の終端に代用する
+    while (isspace(*p)) *p++ = '\0';            // 空白を'\0'に書換える
     if (*p=='\0' || i>=MAXARGS) break;          // コマンド行の終端に到達で終了
     args[i++] = p;                              // 文字列を文字列配列に記録
-    while (*p!='\0' && !isspace(*p))            // 文字列の最後まで進む
-      p++;
+    while (*p!='\0' && !isspace(*p)) p++;       // 文字列の最後まで進む
   }
   args[i] = NULL;                               // 文字列配列の終端マーク
   return *p=='\0';                              // 解析完了なら 1 を返す
 }
 
-void cdCom(char *path) {                        // cd コマンドを実行する
-  if (path==NULL) {                             //   引数があるか調べて
-    fprintf(stderr,"cdの引数が不足\n");
-  } else if (chdir(path)<0) {                   //   親プロセスが chdir する
-    perror(path);
+void cdCom(char *args[]) {                      // cd コマンドを実行する
+  if (args[1]==NULL || args[2]!=NULL) {         //   引数を確認して
+    fprintf(stderr,"Usage: cd DIR\n");          //     過不足ありなら使い方表示
+  } else if (chdir(args[1])<0) {                //   親プロセスが chdir する
+    perror(args[1]);                            //     chdirに失敗したらperror
   }
 }
 
 void setenvCom(char *args[]) {                  // setenv コマンドを実行する
-  if (args[1]==NULL||args[2]==NULL) {           //   引数があるか調べて
-    fprintf(stderr,"setenvの引数が不足\n");
-  } else if (setenv(args[1],args[2],1)<0) {     //   環境変数を変更
-    perror(args[1]);
+  if (args[1]==NULL || args[2]==NULL || args[3]!=NULL) {   // 引数を確認して
+    fprintf(stderr,"Usage: setenv NAME VAL\n"); //   過不足ありなら使い方表示
+  } else if (setenv(args[1], args[2], 1)<0) {   //   親プロセスがsetenvする
+    perror(args[1]);                            //     setenvに失敗したらperror
   }
 }
 
-void unsetenvCom(char *name) {                  // unsetenv コマンドを実行する
-  if (name==NULL) {                             //   引数があるか調べて
-    fprintf(stderr,"unsetenvの引数が不足\n");
-  } else if (unsetenv(name)<0) {                //   環境変数を削除
-      perror(name);
+void unsetenvCom(char *args[]) {                // unsetenv コマンドを実行する
+  if (args[1]==NULL || args[2]!=NULL) {         //   引数を確認して
+    fprintf(stderr,"Usage: unsetenv NAME\n");   //     過不足ありなら使い方表示
+  } else if (unsetenv(args[1])<0) {             //   親プロセスがunsetenvする
+    perror(args[1]);                            //     unsetenvに失敗ならperror
   }
 }
 
@@ -99,11 +97,11 @@ void externalCom(char *args[]) {                // 外部コマンドを実行�
 
 void execute(char *args[]) {                    // コマンドを実行する
   if (strcmp(args[0], "cd")==0) {               // cd コマンド
-    cdCom(args[1]);
+    cdCom(args);
   } else if (strcmp(args[0], "setenv")==0) {    // setenv コマンド
     setenvCom(args);
   } else if (strcmp(args[0], "unsetenv")==0) {  // unsetenv コマンド
-    unsetenvCom(args[1]);
+    unsetenvCom(args);
   } else {                                      // その他は外部コマンド
     externalCom(args);
   }
