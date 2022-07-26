@@ -87,8 +87,8 @@ void externalCom(char *args[]) {                // 外部コマンドを実行�
   }
   if (pid==0) {                                 //   子プロセスなら
     execvp(args[0], args);                      //     コマンドを実行
-    perror(args[0]);                            //     exec 失敗
-    exit(1);                                    //     よくある，子を終了
+    perror(args[0]);
+    exit(1);
   } else {                                      //   親プロセスなら
     while (wait(&status) != pid)                //     子の終了を待つ
       ;
