@@ -70,7 +70,7 @@ void findRedirect(char *args[]) {               // リダイレクトの指示�
 void redirect(int fd, char *path, int flag) {   // リダイレクト処理をする
   //
   // externalCom 関数のどこかから呼び出される
-  // 
+  //
   // fd   : リダイレクトするファイルディスクリプタ
   // path : リダイレクト先ファイル
   // flag : open システムコールに渡すフラグ
