@@ -2,9 +2,10 @@
 // myshell.c : 簡易UNIXシェル（リダイレクト機能準備完了版）
 //
 #include <stdio.h>                              // perror() のため
-#include <stdlib.h>                             // exit() のため
+#include <stdlib.h>                             // exit(), setenv(),
+                                                //  unsetenv() のため
 #include <string.h>                             // strcmp(), strchr() のため
-#include <unistd.h>                             // fork(),exec(),close()のため
+#include <unistd.h>                             // fork(),exec(),chdir()のため
 #include <sys/wait.h>                           // wait() のため
 #include <ctype.h>                              // isspace() のため
 #include <fcntl.h>                              // open() のため
